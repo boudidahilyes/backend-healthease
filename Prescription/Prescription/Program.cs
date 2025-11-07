@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Prescription.Data;
+using Prescription.Repositories;
+using Prescription.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +10,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
+
+builder.Services.AddScoped<PrescriptionRepository>();
+builder.Services.AddScoped<PrescriptionService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

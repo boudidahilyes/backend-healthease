@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Prescription.Models
 {
@@ -15,6 +16,7 @@ namespace Prescription.Models
         public int Remaining { get; set; }
         public int PrescriptionId { get; set; }
         public bool IsActive { get; set; }
-        public Prescription Prescription { get; set; }
+        [JsonIgnore]
+        public Prescription? Prescription { get; set; }
     }
 }
