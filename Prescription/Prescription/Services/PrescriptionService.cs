@@ -21,6 +21,7 @@ namespace Prescription.Services
 
             foreach (var m in prescription.Medicines)
             {
+                m.Remaining = (int)((m.EndDate - m.StartDate).TotalDays) * m.DosePerDay;
                 m.Prescription = prescription;
             }
 
@@ -40,5 +41,15 @@ namespace Prescription.Services
         {
             return await _repo.GetByDoctorIdAsync(doctorId);
         }
+        public async Task<bool> DeleteAsync(int id)
+        {
+            return await _repo.DeleteAsync(id);
+        }
+
+        public async Task<bool> DecrementRemainingAsync(int medicineId)
+        {
+            return await _repo.DecrementRemainingQuantityAsync(medicineId);
+        }
+
     }
 }

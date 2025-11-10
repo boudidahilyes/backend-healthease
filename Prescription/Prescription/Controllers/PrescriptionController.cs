@@ -44,6 +44,17 @@ namespace Prescription.Controllers
             var list = await _service.GetByDoctorIdAsync(doctorId);
             return Ok(list);
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var success = await _service.DeleteAsync(id);
+            if (!success)
+                return NotFound(new { message = "Prescription not found." });
+
+            return Ok(new { message = "Prescription deleted successfully." });
+        }
+
     }
 
 }
