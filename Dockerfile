@@ -1,19 +1,25 @@
 # Build stage
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /app
+WORKDIR /src
 
-# copy csproj and restore as distinct layers
-COPY Prescription/Prescription/Prescription.csproj ./
-RUN dotnet restore
+# copy only the csproj with correct folder structure
+COPY Prescription/Prescription/Prescription.csproj Prescription/Prescription/
 
-# copy everything else and build
-COPY . ./
-RUN dotnet publish -c Release -o out
+# restore
+RUN dotnet restore Prescription/Prescription/Prescription.csproj
+
+# copy the rest of the source
+COPY . .
+
+# publish using the exact project path
+RUN dotnet publish Prescription/Prescription/Prescription.csproj -c Release -o /app/out
 
 # Runtime stage
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
-COPY --from=build /app/out ./
+
+COPY --from=build /app/out .
 ENV ASPNETCORE_URLS=http://+:80
 EXPOSE 80
+
 ENTRYPOINT ["dotnet", "Prescription.dll"]
